@@ -18,30 +18,8 @@ export default function ProductList() {
   const [lowStockProducts, setLowStockProducts] = useState([]);
   
   const entity = 'product';
-
-  useEffect(() => {
-    // loadLowStockProducts();
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
-    const { result } = await request.get({ entity: entity + '/list' });
-    console.log(result); // Replace with state update logic
-  };
-
-  const createProduct = async (productData) => {
-    await request.post({
-      entity: entity + '/create',
-      jsonData: productData,
-    });
-    fetchProducts(); // Refresh product list after creation
-  };
-
-  // const loadLowStockProducts = async () => {
-  //   const { result } = await request.get({ entity: entity + '/low-stock' });
-  //   setLowStockProducts(result);
-  // };
-
+ 
+  
   const updateStock = async () => {
     await request.patch({
       entity: entity + '/update-stock/' + selectedProduct._id,
