@@ -49,11 +49,11 @@ export const crud = {
       if (data.success === true) {
         const result = {
           items: data.result,
-          pagination: {
-            current: parseInt(data.pagination.page, 10),
-            pageSize: options?.items,
-            total: parseInt(data.pagination.count, 10),
-          },
+pagination: {
+  current: parseInt(data.pagination?.page || 1, 10),
+  pageSize: options?.items,
+  total: parseInt(data.pagination?.count || 0, 10),
+},
         };
         dispatch({
           type: actionTypes.REQUEST_SUCCESS,

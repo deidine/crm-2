@@ -51,16 +51,26 @@ export default function ProductCategoryList() {
     ENTITY_NAME: translate('category'),
   };
 
-  const configPage = {
-    entity,
-    ...Labels,
-     fields: [
-      { name: 'name', label: translate('Name'), type: 'text' },
-      { name: 'description', label: translate('Description'), type: 'textarea' },
-      { name: 'parent', label: translate('Parent Category'), type: 'select', options: [] },
-      { name: 'enabled', label: translate('Status'), type: 'select', options: ['Enabled', 'Disabled'] },
-    ]
-  };
+const configPage = {
+  entity,
+  ...Labels,
+  apiEndpoint: `${entity}/list`,
+  readColumns: [
+    { title: translate('Name'), dataIndex: 'name', key: 'name' },
+    { title: translate('Description'), dataIndex: 'description', key: 'description' },
+    { title: translate('Parent Category'), dataIndex: 'parent', key: 'parent' },
+    { title: translate('Status'), dataIndex: 'enabled', key: 'enabled' },
+  ],
+  dataTableColumns: [
+    { title: translate('Name'), dataIndex: 'name', key: 'name' },
+    { title: translate('Description'), dataIndex: 'description', key: 'description' },
+    { title: translate('Parent Category'), dataIndex: 'parent', key: 'parent' },
+    { title: translate('Status'), dataIndex: 'enabled', key: 'enabled' },
+  ],
+  pagination: { pageSize: 10 },
+  searchConfig,
+  deleteModalLabels: ['name'],
+};
 
   return (
     <ErpLayout>
@@ -87,13 +97,7 @@ export default function ProductCategoryList() {
           <CrudModule
             createForm={<ProductCategoryForm />}
             updateForm={<ProductCategoryForm isUpdateForm={true} />}
-            config={configPage}
-            // afterCreate={loadCategoryTree}
-            // afterUpdate={loadCategoryTree}
-            // afterDelete={loadCategoryTree}
-            // entityDisplayLabels={entityDisplayLabels}
-            // searchConfig={searchConfig}
-            // dataTableColumns={dataTableColumns}
+            config={configPage} 
           />
         </main>
       </div>
