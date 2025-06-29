@@ -71,14 +71,24 @@ export default function ProductList() {
   const configPage = {
     entity,
     ...Labels,
-    fields: [
-      { name: 'name', label: translate('Name'), type: 'text' },
-      { name: 'sku', label: translate('SKU'), type: 'text' },
-      { name: 'description', label: translate('Description'), type: 'textarea' },
-      { name: 'quantity', label: translate('Quantity'), type: 'number' },
-      { name: 'unitPrice', label: translate('Unit Price'), type: 'number' },
-      { name: 'status', label: translate('Status'), type: 'select', options: ['in_stock', 'out_of_stock', 'low_stock', 'discontinued'] },
+    apiEndpoint: `${entity}/list`,
+    readColumns: [
+      { title: translate('Name'), dataIndex: 'name', key: 'name' },
+      { title: translate('SKU'), dataIndex: 'sku', key: 'sku' },
+      { title: translate('Description'), dataIndex: 'description', key: 'description' },
+      { title: translate('Quantity'), dataIndex: 'quantity', key: 'quantity' },
+      { title: translate('Unit Price'), dataIndex: 'unitPrice', key: 'unitPrice' },
+      { title: translate('Status'), dataIndex: 'status', key: 'status' },
     ],
+    dataTableColumns: [
+      { title: translate('Name'), dataIndex: 'name', key: 'name' },
+      { title: translate('SKU'), dataIndex: 'sku', key: 'sku' },
+      { title: translate('Description'), dataIndex: 'description', key: 'description' },
+      { title: translate('Quantity'), dataIndex: 'quantity', key: 'quantity' },
+      { title: translate('Unit Price'), dataIndex: 'unitPrice', key: 'unitPrice' },
+      { title: translate('Status'), dataIndex: 'status', key: 'status' },
+    ],
+    pagination: { pageSize: 10 },
     searchConfig,
     deleteModalLabels,
   };
