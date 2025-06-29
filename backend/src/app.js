@@ -43,6 +43,7 @@ app.use('/api', adminAuth.isValidAuthToken, coreApiRouter);
 app.use('/api', adminAuth.isValidAuthToken, erpApiRouter);
 app.use('/download', coreDownloadRouter);
 app.use('/public', corePublicRouter);
+app.use('/api', require('./routes/appRoutes/inventoryRoutes'));
 
 // If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);

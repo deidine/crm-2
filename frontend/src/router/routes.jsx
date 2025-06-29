@@ -5,6 +5,8 @@ import { Navigate } from 'react-router-dom';
 const Logout = lazy(() => import('@/pages/Logout.jsx'));
 const NotFound = lazy(() => import('@/pages/NotFound.jsx'));
 
+const ProductCategory = lazy(() => import('@/pages/ProductCategory/ProductCategoryList'));
+const Product = lazy(() => import('@/pages/Product/ProductList'));
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const Customer = lazy(() => import('@/pages/Customer'));
 const Invoice = lazy(() => import('@/pages/Invoice'));
@@ -131,6 +133,16 @@ let routes = {
       path: '*',
       element: <NotFound />,
     },
+     {
+    path: '/category',
+    element: <ProductCategory />,
+    app: 'inventory'
+  },
+  {
+    path: '/product',
+    element: <Product />,
+    app: 'inventory'
+  },
   ],
 };
 
