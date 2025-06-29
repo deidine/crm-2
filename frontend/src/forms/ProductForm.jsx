@@ -2,11 +2,12 @@ import { Form, Input, InputNumber, Select, Upload, Switch, Tag } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import useLanguage from '@/locale/useLanguage';
 import MoneyInputFormItem from '@/components/MoneyInputFormItem';
+import { useMoney, useDate } from '@/settings';
 import SelectAsync from '@/components/SelectAsync';
 
 export default function ProductForm({ current = null }) {
   const translate = useLanguage();
-
+  const money = useMoney();
   const uploadProps = {
     maxCount: 1,
     multiple: false,
@@ -120,7 +121,13 @@ export default function ProductForm({ current = null }) {
           },
         ]}
       >
-        <MoneyInputFormItem />
+       <InputNumber
+                className="moneyInput"
+                min={0}
+                controls={false} 
+                addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
+                addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
+              />
       </Form.Item>
 
       <Form.Item
@@ -132,7 +139,13 @@ export default function ProductForm({ current = null }) {
           },
         ]}
       >
-        <MoneyInputFormItem />
+       <InputNumber
+                className="moneyInput"
+                min={0}
+                controls={false} 
+                addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
+                addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
+              />
       </Form.Item>
 
       <Form.Item

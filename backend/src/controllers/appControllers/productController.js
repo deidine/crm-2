@@ -107,6 +107,7 @@ const search = async (req, res) => {
 };
 
 const list = async (req, res) => {
+  console.log(req)
   const { page = 1, limit = 10 } = req.query;
   const { category, status } = req.query;
 
@@ -122,13 +123,13 @@ const list = async (req, res) => {
 
   const products = await Product.find(filter)
     .populate('category')
-    .populate('supplier', 'name email phone')
+    // .populate('supplier', 'name email phone')
     .limit(limit * 1)
     .skip((page - 1) * limit)
     .sort({ created: -1 });
 
   const total = await Product.countDocuments(filter);
-
+console.log(products,"deidine")
   return res.status(200).json({
     success: true,
     result: products,
