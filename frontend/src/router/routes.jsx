@@ -9,6 +9,7 @@ const ProductCategory = lazy(() => import('@/pages/ProductCategory/ProductCatego
 const Product = lazy(() => import('@/pages/Product/ProductList'));
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const Customer = lazy(() => import('@/pages/Customer'));
+const Employer = lazy(() => import('@/pages/Employer'));
 const Invoice = lazy(() => import('@/pages/Invoice'));
 const InvoiceCreate = lazy(() => import('@/pages/Invoice/InvoiceCreate'));
 
@@ -57,6 +58,10 @@ let routes = {
     {
       path: '/customer',
       element: <Customer />,
+    },
+    {
+      path: '/employer',
+      element: <Employer />,
     },
 
     {
