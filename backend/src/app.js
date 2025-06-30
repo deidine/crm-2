@@ -18,7 +18,6 @@ const erpApiRouter = require('./routes/appRoutes/appApi');
 const fileUpload = require('express-fileupload');
 // create our Express app
 const app = express();
-const employerRoutes = require('./routes/EmployerRoutes');
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 app.use(
@@ -30,7 +29,6 @@ app.use(
 
 app.use(cookieParser());
 app.use(express.json());
-app.use('/api/employers', employerRoutes);
 app.use(express.urlencoded({ extended: true }));
 
 app.use(compression());

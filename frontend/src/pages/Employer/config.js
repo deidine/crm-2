@@ -32,7 +32,7 @@ export const fields = [
 ];
 
 export const config = {
-  entity: 'employer',
+  entity: 'employers',
   PANEL_TITLE: 'Employer',
   DATATABLE_TITLE: 'Employer List',
   ADD_NEW_ENTITY: 'Add New Employer',
