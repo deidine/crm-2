@@ -6,6 +6,10 @@ const EmployerSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+    removed: {
+    type: Boolean,
+    default: false,
+  },
   managerName: {
     type: String,
     required: true,

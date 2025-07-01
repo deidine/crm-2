@@ -1,6 +1,7 @@
 const create = async (Model, req, res) => {
   // Creating a new document in the collection
   req.body.removed = false;
+  console.log(req.body,Model);
   const result = await new Model({
     ...req.body,
   }).save();

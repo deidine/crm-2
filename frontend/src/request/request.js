@@ -28,7 +28,7 @@ const request = {
   create: async ({ entity, jsonData }) => {
     try {
       includeToken();
-      const response = await axios.post(entity, jsonData);
+      const response = await axios.post(entity + '/create', jsonData);
       successHandler(response, {
         notifyOnSuccess: true,
         notifyOnFailed: true,

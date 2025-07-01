@@ -1,0 +1,10 @@
+ # removed: {
+    type: Boolean,
+    default: false,
+  },
+
+  should be in each model 
+
+  # each model should be the smae as entity both in forntend and backend beacuse it dynamic 
+  # for the frist time you run project you have to run yarn setup to insert in db 
+  # Crud model should be in each entity with config that spesify label and names 
