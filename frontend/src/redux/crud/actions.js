@@ -112,7 +112,7 @@ pagination: {
       });
 
       let data = await request.read({ entity, id });
-
+console.log(data);
       if (data.success === true) {
         dispatch({
           type: actionTypes.CURRENT_ITEM,

@@ -4,7 +4,6 @@ import { request } from '@/request';
 import useOnFetch from '@/hooks/useOnFetch';
 import useDebounce from '@/hooks/useDebounce';
 import { useNavigate } from 'react-router-dom';
-
 import { Select, Empty } from 'antd';
 import useLanguage from '@/locale/useLanguage';
 
@@ -112,7 +111,8 @@ export default function AutoCompleteAsync({
   }, [value]);
 
   return (
-    <Select
+ <> 
+   <Select
       loading={isLoading}
       showSearch
       allowClear
@@ -141,5 +141,5 @@ export default function AutoCompleteAsync({
       ))}
       {withRedirect && <Select.Option value={addNewValue.value}>{addNewValue.label}</Select.Option>}
     </Select>
-  );
+ </> );
 }
