@@ -1,224 +1,130 @@
-"use client"
+import { useState, useEffect } from 'react';
+import { Form, Input, InputNumber, Row, Col } from 'antd';
 
-import { useState, useEffect } from "react"
-import { Form, Input, InputNumber, Row, Col, Tooltip } from "antd"
-import { DeleteOutlined, LockOutlined, LoadingOutlined } from "@ant-design/icons"
-import { useMoney } from "@/settings"
-import calculate from "@/utils/calculate"
-import AutoCompleteAsync from "@/components/AutoCompleteAsync"
-import { useDispatch, useSelector } from "react-redux"
-import { crud } from "@/redux/crud/actions"
+import { DeleteOutlined } from '@ant-design/icons';
+import { useMoney, useDate } from '@/settings';
+import calculate from '@/utils/calculate';
+import AutoCompleteAsync from '@/components/AutoCompleteAsync';
 
 export default function ItemRow({ field, remove, current = null }) {
-  const dispatch = useDispatch()
-  const [totalState, setTotal] = useState(undefined)
-  const [price, setPrice] = useState(0)
-  const [quantity, setQuantity] = useState(0)
-  const [selectedProductId, setSelectedProductId] = useState(null)
-  const [isPriceFromDB, setIsPriceFromDB] = useState(false)
-  const money = useMoney()
-  const form = Form.useFormInstance()
+  const [totalState, setTotal] = useState(undefined);
+  const [price, setPrice] = useState(0);
+  const [quantity, setQuantity] = useState(0);
 
-  // Correct Redux state paths based on your structure
-  const productData = useSelector((state) => state.crud.current?.result)
-  const isLoading = useSelector((state) => state.crud.read?.isLoading)
-
-  console.log("Correct Redux paths:", {
-    productData,
-    isLoading,
-    selectedProductId,
-  })
-
+  const money = useMoney();
   const updateQt = (value) => {
-    setQuantity(value)
-  }
-
+    setQuantity(value);
+  };
   const updatePrice = (value) => {
-    setPrice(value)
-  }
-
-  // Handle product selection - receives product ID from AutoCompleteAsync
-  const handleProductSelect = (productId, option) => {
-    console.log("Selected product ID:", productId)
-    console.log("Option data:", option)
-
-    if (productId) {
-      setSelectedProductId(productId)
-      setIsPriceFromDB(false)
-
-      console.log("Dispatching crud.read with:", { entity: "product", id: productId })
-
-      // Use your existing Redux action to fetch product by ID
-      dispatch(
-        crud.read({
-          entity: "product",
-          id: productId,
-        }),
-      )
-    } else {
-      // Reset if no product selected
-      setSelectedProductId(null)
-      setIsPriceFromDB(false)
-      updatePrice(0)
-      form.setFieldValue([field.name, "price"], 0)
-    }
-  }
-
-  // Listen for product data changes from Redux
-  useEffect(() => {
-    console.log("useEffect triggered with:", {
-      productData,
-      selectedProductId,
-      isLoading,
-    })
-
-    if (productData && selectedProductId && !isLoading) {
-      console.log("Product data available:", productData)
-
-      // Check if this is the product we're waiting for
-      if (productData._id === selectedProductId || productData.id === selectedProductId) {
-        console.log("Product matches selected ID:", productData)
- 
-        const productPrice = productData.unitPrice || productData.costPrice || 0
- 
-
-        updatePrice(productPrice)
-        setIsPriceFromDB(true)
-
-        // Set the form field value for price
-        form.setFieldValue([field.name, "price"], productPrice)
-
-        // Set description from product name or description
-        const description = productData.description || productData.name || ""
-        if (description) {
-          form.setFieldValue([field.name, "description"], description)
-        }
-      }
-    }
-  }, [productData, selectedProductId, isLoading, form, field.name])
+    setPrice(value);
+  };
 
   useEffect(() => {
     if (current) {
-      const { items, invoice } = current
+      // When it accesses the /payment/ endpoint,
+      // it receives an invoice.item instead of just item
+      // and breaks the code, but now we can check if items exists,
+      // and if it doesn't we can access invoice.items.
+
+      const { items, invoice } = current;
 
       if (invoice) {
-        const item = invoice[field.fieldKey]
+        const item = invoice[field.fieldKey];
+
         if (item) {
-          setQuantity(item.quantity)
-          setPrice(item.price)
-          setIsPriceFromDB(true)
-          setSelectedProductId(item.productId || item.itemName)
+          setQuantity(item.quantity);
+          setPrice(item.price);
         }
       } else {
-        const item = items[field.fieldKey]
+        const item = items[field.fieldKey];
+
         if (item) {
-          setQuantity(item.quantity)
-          setPrice(item.price)
-          setIsPriceFromDB(true)
-          setSelectedProductId(item.productId || item.itemName)
+          setQuantity(item.quantity);
+          setPrice(item.price);
         }
       }
     }
-  }, [current])
+  }, [current]);
 
   useEffect(() => {
-    const currentTotal = calculate.multiply(price, quantity)
-    setTotal(currentTotal)
-  }, [price, quantity])
+    const currentTotal = calculate.multiply(price, quantity);
+
+    setTotal(currentTotal);
+  }, [price, quantity]);
 
   return (
-    <Row gutter={[12, 12]} style={{ position: "relative" }}>
+    <Row gutter={[12, 12]} style={{ position: 'relative' }}>
       <Col className="gutter-row" span={5}>
         <Form.Item
-          name={[field.name, "itemName"]}
+          name={[field.name, 'itemName']}
           rules={[
             {
               required: true,
-              message: "Missing product selection",
+              message: 'Missing itemName name',
             },
           ]}
         >
           <AutoCompleteAsync
-            entity={"product"}
-            displayLabels={["name"]}
-            searchFields={"name"}
-            redirectLabel={"Add New Product"}
-            urlToRedirect={"/product"}
-            onChange={handleProductSelect}
-            placeholder="Select Product"
+            entity={'product'}
+            displayLabels={['name']}
+            searchFields={'name'}
+            redirectLabel={'Add New Product'}
+            urlToRedirect={'/product'}
+            onChange={(value, option) => {
+              if (option && option.costPrice !== undefined) {
+                updatePrice(option.costPrice);
+              } else {
+                updatePrice(0);
+              }
+            }}
+            placeholder="Select Item"
           />
         </Form.Item>
       </Col>
-
       <Col className="gutter-row" span={7}>
-        <Form.Item name={[field.name, "description"]}>
-          <Input placeholder="Description (auto-filled from product)" />
+        <Form.Item name={[field.name, 'description']}>
+          <Input placeholder="description Name" />
         </Form.Item>
       </Col>
-
       <Col className="gutter-row" span={3}>
-        <Form.Item name={[field.name, "quantity"]} rules={[{ required: true }]}>
-          <InputNumber style={{ width: "100%" }} min={0} onChange={updateQt} />
+        <Form.Item name={[field.name, 'quantity']} rules={[{ required: true }]}>
+          <InputNumber style={{ width: '100%' }} min={0} onChange={updateQt} />
         </Form.Item>
       </Col>
-
       <Col className="gutter-row" span={4}>
-        <Form.Item name={[field.name, "price"]} rules={[{ required: true }]}>
-          <Tooltip
-            title={
-              isLoading
-                ? "Loading price from database..."
-                : isPriceFromDB
-                  ? `Price loaded: ${productData?.name || "Product"} - Unit Price: ${productData?.unitPrice}, Cost Price: ${productData?.costPrice}`
-                  : "Select a product to load price automatically"
-            }
-            placement="top"
-          >
-            <InputNumber
-              className="moneyInput"
-              value={price}
-              readOnly={isPriceFromDB || isLoading}
-              disabled={isPriceFromDB || isLoading}
-              min={0}
-              controls={false}
-              style={{
-                backgroundColor: isPriceFromDB || isLoading ? "#f5f5f5" : "white",
-                cursor: isPriceFromDB || isLoading ? "not-allowed" : "text",
-                borderColor: isPriceFromDB ? "#52c41a" : undefined,
-              }}
-              addonAfter={
-                <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                  {isLoading && <LoadingOutlined style={{ color: "#1890ff", fontSize: "12px" }} />}
-                  {isPriceFromDB && !isLoading && <LockOutlined style={{ color: "#52c41a", fontSize: "12px" }} />}
-                  {money.currency_position === "after" ? money.currency_symbol : undefined}
-                </div>
-              }
-              addonBefore={money.currency_position === "before" ? money.currency_symbol : undefined}
-              placeholder={isLoading ? "Loading..." : isPriceFromDB ? "Price from database" : "Select product first"}
-            />
-          </Tooltip>
-        </Form.Item>
-      </Col>
-
-      <Col className="gutter-row" span={5}>
-        <Form.Item name={[field.name, "total"]}>
+        <Form.Item name={[field.name, 'price']} rules={[{ required: true }]}>
           <InputNumber
-            readOnly
             className="moneyInput"
-            value={totalState}
+            onChange={updatePrice}
             min={0}
             controls={false}
-            addonAfter={money.currency_position === "after" ? money.currency_symbol : undefined}
-            addonBefore={money.currency_position === "before" ? money.currency_symbol : undefined}
-            formatter={(value) => money.amountFormatter({ amount: value, currency_code: money.currency_code })}
+            addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
+            addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
           />
         </Form.Item>
       </Col>
- 
+      <Col className="gutter-row" span={5}>
+        <Form.Item name={[field.name, 'total']}>
+          <Form.Item>
+            <InputNumber
+              readOnly
+              className="moneyInput"
+              value={totalState}
+              min={0}
+              controls={false}
+              addonAfter={money.currency_position === 'after' ? money.currency_symbol : undefined}
+              addonBefore={money.currency_position === 'before' ? money.currency_symbol : undefined}
+              formatter={(value) =>
+                money.amountFormatter({ amount: value, currency_code: money.currency_code })
+              }
+            />
+          </Form.Item>
+        </Form.Item>
+      </Col>
 
-      <div style={{ position: "absolute", right: "-20px", top: " 5px" }}>
+      <div style={{ position: 'absolute', right: '-20px', top: ' 5px' }}>
         <DeleteOutlined onClick={() => remove(field.name)} />
       </div>
     </Row>
-  )
+  );
 }
