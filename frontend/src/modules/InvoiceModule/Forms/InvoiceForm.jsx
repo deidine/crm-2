@@ -26,7 +26,10 @@ export default function InvoiceForm({ subTotal = 0, current = null }) {
     return <></>;
   }
 
-  return <LoadInvoiceForm subTotal={subTotal} current={current} />;
+  return <>
+
+  <LoadInvoiceForm subTotal={subTotal} current={current} />;
+  </>
 }
 
 function LoadInvoiceForm({ subTotal = 0, current = null }) {
