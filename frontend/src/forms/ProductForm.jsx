@@ -191,7 +191,7 @@ export default function ProductForm({ current = null }) {
         name="supplier"
       >
         <SelectAsync 
-          entity="client"
+          entity="supplier"
           displayLabels={['name']}
           searchFields="name"
           outputValue="_id"
