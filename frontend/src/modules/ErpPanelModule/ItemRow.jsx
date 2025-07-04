@@ -98,7 +98,7 @@ export default function ItemRow({ field, remove, current = null }) {
         </Form.Item>
       </Col>
       <Col className="gutter-row" span={4}>
-        <Form.Item name={[field.name, 'price']} rules={[{ required: true }]}>
+        <Form.Item name={[field.name, 'price']} rules={[{ required: true }]} initialValue={price}>
           <Tooltip title={'Select a product to load price automatically'} placement="top">          
             <InputNumber
               className="moneyInput"
