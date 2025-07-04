@@ -28,7 +28,7 @@ export default function ItemRow({ field, remove, current = null }) {
 
       console.log('Dispatching crud.read with:', { entity: 'product', id: productId });
 
-       updatePrice(option[0]["costPrice"])
+       updatePrice(option?.costPrice || 0)
     
     } else {
       // Reset if no product selected 

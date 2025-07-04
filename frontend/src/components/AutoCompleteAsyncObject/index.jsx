@@ -37,21 +37,20 @@ export default function AutoCompleteAsyncObject({
   const navigate = useNavigate();
 
   const handleSelectChange = (newValue) => {
-    isUpdating.current = false;
-    // setCurrentValue(value[outputValue] || value); // set nested value or value
-    // onChange(newValue[outputValue] || newValue);
-    if (onChange) {
-  
-  const selectedObject = Object.values(selectOptions)
-    .filter((val) =>  val._id==(newValue[outputValue]  || newValue))
-     
-      setCurrentValueObject(selectedObject)
-      if (newValue) onChange(newValue[outputValue] || newValue,currentValueObject);
-    }
-    if (newValue === 'redirectURL' && withRedirect) {
-      navigate(urlToRedirect);
-    }
-  };
+  isUpdating.current = false;
+
+  const selectedObject = Object.values(selectOptions).find(
+    (val) => val._id === (newValue[outputValue] || newValue)
+  );
+
+  if (onChange) {
+    onChange(newValue[outputValue] || newValue, selectedObject);
+  }
+
+  if (newValue === 'redirectURL' && withRedirect) {
+    navigate(urlToRedirect);
+  }
+};
 
   const handleOnSelect = (value) => {
     setCurrentValue(value[outputValue] || value); // set nested value or value
