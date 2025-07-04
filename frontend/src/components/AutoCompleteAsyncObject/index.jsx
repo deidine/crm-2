@@ -111,7 +111,6 @@ export default function AutoCompleteAsyncObject({
       setOptions([value]);
       setCurrentValue(value[outputValue] || value); // set nested value or value
       onChange(value[outputValue] || value);
-      alert(JSON.stringify(selectOptions))
       isUpdating.current = false;
     }
   }, [value]);

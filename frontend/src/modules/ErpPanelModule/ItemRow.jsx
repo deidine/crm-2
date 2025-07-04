@@ -158,6 +158,8 @@ export default function ItemRow({ field, remove, current = null }) {
             onChange={handlePriceChange}
             min={0}
             controls={false}
+            readOnly={true}
+            
             addonAfter={money.currency_position === "after" ? money.currency_symbol : undefined}
             addonBefore={money.currency_position === "before" ? money.currency_symbol : undefined}
             placeholder="0.00"
