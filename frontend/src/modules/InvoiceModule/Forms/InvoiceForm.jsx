@@ -192,7 +192,7 @@ function LoadInvoiceForm({ subTotal = 0, current = null }) {
         <Col className="gutter-row" span={5}>
           <p>{translate('Total')}</p>
         </Col>
-      </Row>
+      </Row> 
       <Form.List name="items">
         {(fields, { add, remove }) => (
           <>
