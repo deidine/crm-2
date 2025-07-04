@@ -3,20 +3,15 @@ import { Form, Input, InputNumber, Row, Col, Tooltip } from 'antd';
 import { DeleteOutlined, LockOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useMoney } from '@/settings';
 import calculate from '@/utils/calculate';
-import AutoCompleteAsync from '@/components/AutoCompleteAsync';
-import { useDispatch, useSelector } from 'react-redux';
-import { crud } from '@/redux/crud/actions';
-
+import AutoCompleteAsyncObject from '@/components/AutoCompleteAsyncObject';
+ 
 export default function ItemRow({ field, remove, current = null }) {
-  const dispatch = useDispatch();
   const [totalState, setTotal] = useState(undefined);
   const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(0);
-  const [selectedProductId, setSelectedProductId] = useState(null);
   const money = useMoney();
 
   // Correct Redux state paths based on your structure
-  const productData = useSelector((state) => state.crud.current?.result);
   const updateQt = (value) => {
     setQuantity(value);
   };
@@ -29,39 +24,20 @@ export default function ItemRow({ field, remove, current = null }) {
   const handleProductSelect = (productId, option) => {
     console.log('Selected product ID:', productId);
     console.log('Option data:', option);
-
-    if (productId) {
-      setSelectedProductId(productId);
+    if (option) { 
 
       console.log('Dispatching crud.read with:', { entity: 'product', id: productId });
 
-      // Use your existing Redux action to fetch product by ID
-      dispatch(
-        crud.read({
-          entity: 'product',
-          id: productId,
-        })
-      );
+       updatePrice(option[0]["costPrice"])
+    
     } else {
-      // Reset if no product selected
-      setSelectedProductId(null)
+      // Reset if no product selected 
        updatePrice(0)
     }
   };
 
-  // Listen for product data changes from Redux
+ 
   useEffect(() => {
-    if (productData && selectedProductId) {
-      // Check if this is the product we're waiting for
-      if (productData._id === selectedProductId) {
-        const productPrice = productData.unitPrice || productData.costPrice || 0;
-        updatePrice(productPrice);
-      }
-    }
-  }, [productData, selectedProductId, field.name]);
-
-  useEffect(() => {
-    alert(JSON.stringify(current))
     if (current) {
       const { items, invoice } = current;
       if (invoice) {
@@ -69,15 +45,13 @@ export default function ItemRow({ field, remove, current = null }) {
         if (item) {
           setQuantity(item.quantity);
           setPrice(item.price);
-          setSelectedProductId(item.productId || item.itemName);
-        }
+         }
       } else {
         const item = items[field.fieldKey];
         if (item) {
           setQuantity(item.quantity);
           setPrice(item.price);
-          setSelectedProductId(item.productId || item.itemName);
-        }
+         }
       }
     }
   }, [current]);
@@ -101,7 +75,7 @@ export default function ItemRow({ field, remove, current = null }) {
             },
           ]}
         >
-          <AutoCompleteAsync
+          <AutoCompleteAsyncObject
             entity={'product'}
             withRedirect
             displayLabels={['name']}
