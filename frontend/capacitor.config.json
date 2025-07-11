@@ -1,0 +1,29 @@
+{
+  "appId": "com.idurar.erp",
+  "appName": "IDURAR ERP CRM",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "allowNavigation": [
+      "*.idurarapp.com"
+    ]
+  },
+  "plugins": {
+    "App": {
+      "backgroundColor": "#ffffff"
+    },
+    "Network": {
+      "pingTimeout": 30000
+    },
+    "Preferences": {
+      "group": "idurar-preferences"
+    }
+  },
+  "ios": {
+    "contentInset": "always"
+  },
+  "android": {
+    "backgroundColor": "#ffffff",
+    "allowMixedContent": true
+  }
+}
